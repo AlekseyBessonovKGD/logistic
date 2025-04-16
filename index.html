@@ -394,7 +394,7 @@
 <div id="current-out"></div>
 <!-- <script src="/public/map/current_orders.js" type="module"></script> -->
 <script type="module">
-  import { ORDERS } from "current_orders.js"
+  import { ORDERS } from "//current_orders.js"
   var source = document.getElementById("current-template").innerHTML;
   var template = Handlebars.compile(source);
   var context = { orders: ORDERS };
