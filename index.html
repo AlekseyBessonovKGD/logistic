@@ -1,0 +1,1399 @@
+ 
+<html data-theme="corporate" lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="styles.css" rel="stylesheet" />
+    <!-- <link rel="icon" type="image/png" href="/styles/favicon.png" /> -->
+    <title>Кабинет Логиста</title>
+    <script src="https://cdn.jsdelivr.net/gh/gnat/surreal@main/surreal.js"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.3"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+  </head>
+  <body>
+    <div class="navbar bg-base-100">
+      <a class="btn btn-ghost text-xl">Кабинет Логиста</a>
+      <div class="grow"></div>
+      <div class="dropdown">
+  <div tabindex="0" role="button" class="btn m-1">
+    <div class="hidden md:inline"> Выбор темы </div>
+    <div class="md:hidden"> Тема </div>
+  </div>
+  <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+    <li><a>rosepine</a></li>
+    <li><a>rosepine-moon</a></li>
+    <li><a>rosepine-dawn</a></li>
+    <li><a>light</a></li>
+    <li><a>dark</a></li>
+    <li><a>cupcake</a></li>
+    <li><a>bumblebee</a></li>
+    <li><a>emerald</a></li>
+    <li><a>corporate</a></li>
+    <li><a>synthwave</a></li>
+    <li><a>retro</a></li>
+    <li><a>cyberpunk</a></li>
+    <li><a>valentine</a></li>
+    <li><a>halloween</a></li>
+    <li><a>garden</a></li>
+    <li><a>forest</a></li>
+    <li><a>aqua</a></li>
+    <li><a>lofi</a></li>
+    <li><a>pastel</a></li>
+    <li><a>fantasy</a></li>
+    <li><a>wireframe</a></li>
+    <li><a>black</a></li>
+    <li><a>luxury</a></li>
+    <li><a>dracula</a></li>
+    <li><a>cmyk</a></li>
+    <li><a>autumn</a></li>
+    <li><a>business</a></li>
+    <li><a>acid</a></li>
+    <li><a>lemonade</a></li>
+    <li><a>night</a></li>
+    <li><a>coffee</a></li>
+    <li><a>winter</a></li>
+    <li><a>dim</a></li>
+    <li><a>nord</a></li>
+    <li><a>sunset</a></li>
+    <script>
+      const update_theme = () => me("html").attribute("data-theme", localStorage.getItem("theme") || "corporate")
+      me().on("click", ev => { localStorage.setItem("theme", ev.target.innerHTML); update_theme() })
+      update_theme()
+    </script>
+  </ul>
+</div>
+      <label class="flex cursor-pointer gap-2">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <circle cx="12" cy="12" r="5" />
+    <path
+      d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"
+    />
+  </svg>
+  <input type="checkbox" value="dark" class="toggle theme-controller" />
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  </svg>
+</label>
+    </div>
+    <div class="flex h-screen">
+      <!-- Sidebar -->
+      <div class="w-64 bg-base-100 p-4 flex flex-col">
+        <script>
+          currently_checked = null;
+          const check_me = (i_am) => {
+            if (currently_checked) {
+              currently_checked.classList.add("hover:bg-base-300");
+              currently_checked.classList.remove("bg-neutral", "text-neutral-content");
+            }
+            currently_checked = i_am;
+            currently_checked.classList.remove("hover:bg-base-300");
+            currently_checked.classList.add("bg-neutral", "text-neutral-content");
+          }
+        </script>
+        
+          <label
+            class="p-2 mb-2 bg-base-200 hover:bg-base-300 rounded cursor-pointer"
+            for="tab0"
+            id="tab0_label"
+            >Профиль
+            <script>
+              
+              me().on("click", (ev) => {
+                //history.pushState({}, null, "/logist/profile");
+                check_me(me(ev));
+              });
+            </script>
+          </label>
+        
+          <label
+            class="p-2 mb-2 bg-base-200 hover:bg-base-300 rounded cursor-pointer"
+            for="tab1"
+            id="tab1_label"
+            >Текущие заявки
+            <script>
+              
+              me().on("click", (ev) => {
+                //history.pushState({}, null, "/logist/currnent");
+                check_me(me(ev));
+              });
+            </script>
+          </label>
+        
+          <label
+            class="p-2 mb-2 bg-base-200 hover:bg-base-300 rounded cursor-pointer"
+            for="tab2"
+            id="tab2_label"
+            >Исполненные заявки
+            <script>
+              
+              me().on("click", (ev) => {
+                //history.pushState({}, null, "/logist/done");
+                check_me(me(ev));
+              });
+            </script>
+          </label>
+        
+          <label
+            class="p-2 mb-2 bg-base-200 hover:bg-base-300 rounded cursor-pointer"
+            for="tab3"
+            id="tab3_label"
+            >Календарь судов
+            <script>
+              
+              me().on("click", (ev) => {
+                //history.pushState({}, null, "/logist/calendar");
+                check_me(me(ev));
+              });
+            </script>
+          </label>
+        
+          <label
+            class="p-2 mb-2 bg-base-200 hover:bg-base-300 rounded cursor-pointer"
+            for="tab4"
+            id="tab4_label"
+            >Внешние ресурсы
+            <script>
+              
+              me().on("click", (ev) => {
+                //history.pushState({}, null, "/logist/outer");
+                check_me(me(ev));
+              });
+            </script>
+          </label>
+        
+          <label
+            class="p-2 mb-2 bg-base-200 hover:bg-base-300 rounded cursor-pointer"
+            for="tab5"
+            id="tab5_label"
+            >Расчеты 1
+            <script>
+              
+              me().on("click", (ev) => {
+                //history.pushState({}, null, "/logist/calculus");
+                check_me(me(ev));
+              });
+            </script>
+          </label>
+        
+          <label
+            class="p-2 mb-2 bg-base-200 hover:bg-base-300 rounded cursor-pointer"
+            for="tab6"
+            id="tab6_label"
+            >Расчеты 2
+            <script>
+              
+              me().on("click", (ev) => {
+                //history.pushState({}, null, "/logist/calculus_one");
+                check_me(me(ev));
+              });
+            </script>
+          </label>
+        
+          <label
+            class="p-2 mb-2 bg-base-200 hover:bg-base-300 rounded cursor-pointer"
+            for="tab7"
+            id="tab7_label"
+            >Расчеты 3
+            <script>
+              
+              me().on("click", (ev) => {
+                //history.pushState({}, null, "/logist/calculus_two");
+                check_me(me(ev));
+              });
+            </script>
+          </label>
+        
+          <label
+            class="p-2 mb-2 bg-base-200 hover:bg-base-300 rounded cursor-pointer"
+            for="tab8"
+            id="tab8_label"
+            >Выставление счетов
+            <script>
+              
+              me().on("click", (ev) => {
+                //history.pushState({}, null, "/logist/confirmed");
+                check_me(me(ev));
+              });
+            </script>
+          </label>
+        
+          <label
+            class="p-2 mb-2 bg-base-200 hover:bg-base-300 rounded cursor-pointer"
+            for="tab9"
+            id="tab9_label"
+            >Крупный заказ
+            <script>
+              
+              me().on("click", (ev) => {
+                //history.pushState({}, null, "/logist/mono");
+                check_me(me(ev));
+              });
+            </script>
+          </label>
+        
+          <label
+            class="p-2 mb-2 bg-base-200 hover:bg-base-300 rounded cursor-pointer"
+            for="tab10"
+            id="tab10_label"
+            >Поддержка
+            <script>
+              
+              check_me(me());
+              
+              me().on("click", (ev) => {
+                //history.pushState({}, null, "/logist/support");
+                check_me(me(ev));
+              });
+            </script>
+          </label>
+        
+      </div>
+
+      <!-- Content -->
+      <div class="flex-1 p-6 relative">
+        
+          <input
+            type="radio"
+            name="tabs"
+            id="tab0"
+            class="hidden peer/tab0"
+            
+          />
+          <div class="tab-content peer-checked/tab0:block hidden">
+            <!-- <h1 class="text-2xl font-bold">Профиль</h1> -->
+            <div class="container pl-10 flex flex-col gap-4">
+  <div class="text-2xl font-semibold">Профиль</div>
+  <div class="text-lg font-semibold">
+    Имя: test_name
+  </div>
+  <div class="text-lg font-semibold">Email: test_mail</div>
+    <div class="badge badge-success gap-2">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        class="inline-block h-4 w-4 stroke-current"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5 13l4 4L19 7"
+        ></path>
+      </svg>
+      подтверден
+    </div>
+  <div class="text-lg font-semibold">
+    Дата регистрации: 01.03.2025
+  </div>
+  <div class="text-lg font-semibold">
+      Тип пользователя: Логист
+  </div>
+  <div class="flex gap-10">
+    <a class="btn btn-outline btn-info" href="/profile/requisites/legal_entity"
+      >Добавить реквизиты</a
+    >
+  </div>
+</div>
+          </div>
+        
+          <input
+            type="radio"
+            name="tabs"
+            id="tab1"
+            class="hidden peer/tab1"
+            
+          />
+          <div class="tab-content peer-checked/tab1:block hidden">
+            <!-- <h1 class="text-2xl font-bold">Текущие заявки</h1> -->
+            
+<script id="current-template" type="text-handlebars-template">
+  <table class="min-w-full table-auto border">
+      <tr>
+        <th class="border">Покупатель</th>
+        <th class="border">Условия транспортировки</th>
+        <th class="border">Продавец</th>
+        <th class="border">Регион отправления</th>
+        <th class="border">Адрес отправления</th>
+        <th class="border">Адрес доставки</th>
+        <th class="border">Тип груза</th>
+        <th class="border">Наименование товара</th>
+        <th class="border">Общее количество штук</th>
+        <th class="border">Вес единицы, кг</th>
+        <th class="border">Длина, м</th>
+        <th class="border">Ширина, м</th>
+        <th class="border">Высота, м</th>
+        <th class="border">Объем единицы, м^3</th>
+        <th class="border">Общий Вес, кг</th>
+        <th class="border">Общий объем, м^3</th>
+        <th class="border">ТН ВЭД</th>
+        <th class="border">ЕТ СНГ</th>
+        <th class="border">Статус</th>
+        <th class="border">"Цена доставки"</th>
+        <th class="border">Маршрут</th>
+      </tr>
+      {{#each orders}}
+      <tr>
+        <td class="border">{{ buyer }}</td>
+        <td class="border">{{#if cold_conditions }}охлажденный{{else}}универсальный{{/if}}</td>
+        <td class="border">{{ seller }}</td>
+        <td class="border">{{ regio_from }}</td>
+        <td class="border">{{ addres_from }}</td>
+        <td class="border">{{ addres_to }}</td>
+        <td class="border">{{ product_type }}</td>
+        <td class="border">{{ product_name }}</td>
+        <td class="border">{{ count }}</td>
+        <td class="border">{{ weight }}</td>
+        <td class="border">{{ length }}</td>
+        <td class="border">{{ width }}</td>
+        <td class="border">{{ height }}</td>
+        <td class="border">{{ volume }}</td>
+        <td class="border">{{ weight_sum }}</td>
+        <td class="border">{{ volume_sum }}</td>
+        <td class="border">{{ code1 }}</td>
+        <td class="border">{{ code2 }}</td>
+        <td class="border">{{ status }}</td>
+        <td class="border">{{ price }}</td>
+        <td class="border"> <button class="btn">Маршрут</button></td>
+      </tr>
+      {{/each}}
+  </table>
+</script>
+
+<div id="current-out"></div>
+<!-- <script src="/public/map/current_orders.js" type="module"></script> -->
+<script type="module">
+  import { ORDERS } from "/current_orders.js"
+  var source = document.getElementById("current-template").innerHTML;
+  var template = Handlebars.compile(source);
+  var context = { orders: ORDERS };
+  document.getElementById("current-out").innerHTML = template(context);
+</script>
+          </div>
+        
+          <input
+            type="radio"
+            name="tabs"
+            id="tab2"
+            class="hidden peer/tab2"
+            
+          />
+          <div class="tab-content peer-checked/tab2:block hidden">
+            <!-- <h1 class="text-2xl font-bold">Исполненные заявки</h1> -->
+            
+  <script id="done-template" type="text-handlebars-template">
+    <table class="min-w-full table-auto border">
+        <tr>
+          <th class="border">Покупатель</th>
+          <th class="border">Условие транспортировки</th>
+          <th class="border">Продавец</th>
+          <th class="border">Регион отправления</th>
+          <th class="border">Адрес отправления</th>
+          <th class="border">Адрес доставки</th>
+          <th class="border">Тип груза</th>
+          <th class="border">Наименование товара</th>
+          <th class="border">Общее количество штук</th>
+          <th class="border">Вес единицы, кг</th>
+          <th class="border">Длина, м</th>
+          <th class="border">Ширина, м</th>
+          <th class="border">Высота, м</th>
+          <th class="border">Объем единицы, м^3</th>
+          <th class="border">Общий Вес, кг</th>
+          <th class="border">Общий объем, м^3</th>
+          <th class="border">ТН ВЭД</th>
+          <th class="border">ЕТ СНГ</th>
+          <th class="border">Статус</th>
+          <th class="border">"Цена доставки"</th>
+        </tr>
+        {{#each orders}}
+        <tr>
+          <td class="border">{{ buyer }}</td>
+          <td class="border">{{#if cold_conditions }}охлажденный{{else}}универсальный{{/if}}</td>
+          <td class="border">{{ seller }}</td>
+          <td class="border">{{ regio_from }}</td>
+          <td class="border">{{ addres_from }}</td>
+          <td class="border">{{ addres_to }}</td>
+          <td class="border">{{ product_type }}</td>
+          <td class="border">{{ product_name }}</td>
+          <td class="border">{{ count }}</td>
+          <td class="border">{{ weight }}</td>
+          <td class="border">{{ length }}</td>
+          <td class="border">{{ width }}</td>
+          <td class="border">{{ height }}</td>
+          <td class="border">{{ volume }}</td>
+          <td class="border">{{ weight_sum }}</td>
+          <td class="border">{{ volume_sum }}</td>
+          <td class="border">{{ code1 }}</td>
+          <td class="border">{{ code2 }}</td>
+          <td class="border">{{ status }}</td>
+          <td class="border">{{ x5 weight_sum }}</td>
+        </tr>
+        {{/each}}
+    </table>
+  </script>
+
+<div id="done-out"></div>
+<!-- <script src="/public/map/done_orders.js" type="module"></script> -->
+<script type="module">
+  import { ORDERS } from "/current_orders.js";
+  Handlebars.registerHelper("x5", function (aNumber) {
+    return aNumber * 5;
+  });
+  var source = document.getElementById("done-template").innerHTML;
+  var template = Handlebars.compile(source);
+  var context = { orders: ORDERS };
+  document.getElementById("done-out").innerHTML = template(context);
+</script>
+          </div>
+        
+          <input
+            type="radio"
+            name="tabs"
+            id="tab3"
+            class="hidden peer/tab3"
+            
+          />
+          <div class="tab-content peer-checked/tab3:block hidden">
+            <!-- <h1 class="text-2xl font-bold">Календарь судов</h1> -->
+            <table class="min-w-full table-auto border">
+  <!-- <thead> -->
+  <thead>
+    <tr>
+      <th rowspan="2" class="border">Город отправления</th>
+      <th rowspan="2" class="border">Город назначения</th>
+      <th rowspan="2" class="border">Имя судна</th>
+      <th rowspan="2" class="border">Тип судна</th>
+      <th rowspan="2" class="border">Владелец судна</th>
+      <th rowspan="2" class="border">Агент</th>
+
+      <th colspan="4" class="border">Выход</th>
+      <th colspan="4" class="border">Заход</th>
+    </tr>
+    <tr>
+      <th class="border">Дата</th>
+      <th class="border">Порт</th>
+      <th class="border">Терм</th>
+      <th class="border">Адрес</th>
+
+      <th class="border">Дата</th>
+      <th class="border">Порт</th>
+      <th class="border">Терм</th>
+      <th class="border">Адрес</th>
+    </tr>
+  </thead>
+  <tr>
+    <td class="border">Санкт-Петербург</td>
+    <td class="border">Балтийск</td>
+    <td class="border">ФЕСКО наварин</td>
+    <td class="border">контейнеровоз</td>
+    <td class="border">ФЕСКО</td>
+    <td class="border">ФЕСКО</td>
+    <td class="border">3/8/2025</td>
+    <td class="border">АО «Морской порт Санкт-Петербург»</td>
+    <td class="border">ЗАО"ПКТ"</td>
+    <td class="border">Санкт-Петербург, дорога на Турухтанные Острова, 17</td>
+    <td class="border">3/10/2025</td>
+    <td class="border">Балтийск</td>
+    <td class="border">ООО"БСК"</td>
+    <td class="border">Калининградская обл., г. Балтийск, Нижнее шоссе, 17</td>
+  </tr>
+  <tr>
+    <td class="border">Санкт-Петербург</td>
+    <td class="border">Балтийск</td>
+    <td class="border">ФЕСКО наварин</td>
+    <td class="border">контейнеровоз</td>
+    <td class="border">ФЕСКО</td>
+    <td class="border">ФЕСКО</td>
+    <td class="border">3/15/2025</td>
+    <td class="border">АО «Морской порт Санкт-Петербург»</td>
+    <td class="border">ЗАО"ПКТ"</td>
+    <td class="border">Санкт-Петербург, дорога на Турухтанные Острова, 18</td>
+    <td class="border">3/17/2025</td>
+    <td class="border">Балтийск</td>
+    <td class="border">ООО"БСК"</td>
+    <td class="border">Калининградская обл., г. Балтийск, Нижнее шоссе, 17</td>
+  </tr>
+  <tr>
+    <td class="border">Санкт-Петербург</td>
+    <td class="border">Балтийск</td>
+    <td class="border">ФЕСКО наварин</td>
+    <td class="border">контейнеровоз</td>
+    <td class="border">ФЕСКО</td>
+    <td class="border">ФЕСКО</td>
+    <td class="border">3/22/2025</td>
+    <td class="border">АО «Морской порт Санкт-Петербург»</td>
+    <td class="border">ЗАО"ПКТ"</td>
+    <td class="border">Санкт-Петербург, дорога на Турухтанные Острова, 19</td>
+    <td class="border">3/24/2025</td>
+    <td class="border">Балтийск</td>
+    <td class="border">ООО"БСК"</td>
+    <td class="border">Калининградская обл., г. Балтийск, Нижнее шоссе, 17</td>
+  </tr>
+  <tr>
+    <td class="border">Санкт-Петербург</td>
+    <td class="border">Калининград</td>
+    <td class="border">Т/Х Новик Мария</td>
+    <td class="border">контейнеровоз</td>
+    <td class="border">НОВИК Логистик</td>
+    <td class="border">НОВИК Логистик</td>
+    <td class="border">3/11/2025</td>
+    <td class="border">АО «Морской порт Санкт-Петербург»</td>
+    <td class="border">ОАО «ПЛП»</td>
+    <td class="border">Санкт-Петербург, Гладкий остров, 1</td>
+    <td class="border">3/13/2025</td>
+    <td class="border">Калининград</td>
+    <td class="border">РОРО КМТП</td>
+    <td class="border">Калининградская обл. , Калининград, Портовая 24</td>
+  </tr>
+  <tr>
+    <td class="border">Санкт-Петербург</td>
+    <td class="border">Калининград</td>
+    <td class="border">Т/Х Новик Мария</td>
+    <td class="border">контейнеровоз</td>
+    <td class="border">НОВИК Логистик</td>
+    <td class="border">НОВИК Логистик</td>
+    <td class="border">3/18/2025</td>
+    <td class="border">АО «Морской порт Санкт-Петербург»</td>
+    <td class="border">ОАО «ПЛП»</td>
+    <td class="border">Санкт-Петербург, Гладкий остров, 2</td>
+    <td class="border">3/20/2025</td>
+    <td class="border">Калининград</td>
+    <td class="border">РОРО КМТП</td>
+    <td class="border">Калининградская обл. , Калининград, Портовая 24</td>
+  </tr>
+  <tr>
+    <td class="border">Санкт-Петербург</td>
+    <td class="border">Калининград</td>
+    <td class="border">Т/Х Новик Мария</td>
+    <td class="border">контейнеровоз</td>
+    <td class="border">НОВИК Логистик</td>
+    <td class="border">НОВИК Логистик</td>
+    <td class="border">3/24/2025</td>
+    <td class="border">АО «Морской порт Санкт-Петербург»</td>
+    <td class="border">ОАО «ПЛП»</td>
+    <td class="border">Санкт-Петербург, Гладкий остров, 3</td>
+    <td class="border">3/26/2025</td>
+    <td class="border">Калининград</td>
+    <td class="border">РОРО КМТП</td>
+    <td class="border">Калининградская обл. , Калининград, Портовая 24</td>
+  </tr>
+  <tr>
+    <td class="border">Санкт-Петербург</td>
+    <td class="border">Балтийск</td>
+    <td class="border">Маршал рокосовский</td>
+    <td class="border">паром</td>
+    <td class="border">ФГУП «Росморпорт"</td>
+    <td class="border">ООО «Оборонлогистика»</td>
+    <td class="border">3/10/2025</td>
+    <td class="border">Порт "Усть-Луга"</td>
+    <td class="border">А-Ж ПК</td>
+    <td class="border">Ленинградская область, Кингисеппский район, Усть-Лужское сельское поселение</td>
+    <td class="border">3/13/2025</td>
+    <td class="border">Балтийск</td>
+    <td class="border">ООО"БСК"</td>
+    <td class="border">Калининградская обл., г. Балтийск, Морской бул., 2Б</td>
+  </tr>
+  <tr>
+    <td class="border">Санкт-Петербург</td>
+    <td class="border">Балтийск</td>
+    <td class="border">Маршал рокосовский</td>
+    <td class="border">паром</td>
+    <td class="border">ФГУП «Росморпорт"</td>
+    <td class="border">ООО «Оборонлогистика»</td>
+    <td class="border">3/16/2025</td>
+    <td class="border">Порт "Усть-Луга"</td>
+    <td class="border">А-Ж ПК</td>
+    <td class="border">Ленинградская область, Кингисеппский район, Усть-Лужское сельское поселение</td>
+    <td class="border">3/19/2025</td>
+    <td class="border">Балтийск</td>
+    <td class="border">ООО"БСК"</td>
+    <td class="border">Калининградская обл., г. Балтийск, Морской бул., 2Б</td>
+  </tr>
+  <tr>
+    <td class="border">Санкт-Петербург</td>
+    <td class="border">Балтийск</td>
+    <td class="border">Маршал рокосовский</td>
+    <td class="border">паром</td>
+    <td class="border">ФГУП «Росморпорт"</td>
+    <td class="border">ООО «Оборонлогистика»</td>
+    <td class="border">3/21/2025</td>
+    <td class="border">Порт "Усть-Луга"</td>
+    <td class="border">А-Ж ПК</td>
+    <td class="border">Ленинградская область, Кингисеппский район, Усть-Лужское сельское поселение</td>
+    <td class="border">3/24/2025</td>
+    <td class="border">Балтийск</td>
+    <td class="border">ООО"БСК"</td>
+    <td class="border">Калининградская обл., г. Балтийск, Морской бул., 2Б</td>
+  </tr>
+</table>
+
+
+
+          </div>
+        
+          <input
+            type="radio"
+            name="tabs"
+            id="tab4"
+            class="hidden peer/tab4"
+            
+          />
+          <div class="tab-content peer-checked/tab4:block hidden">
+            <!-- <h1 class="text-2xl font-bold">Внешние ресурсы</h1> -->
+            <div class="grid grid-cols-4 gap-8 max-w-4xl mx-auto">
+  
+  <div class="flex flex-col">
+    <a href="https://rdlog.ru/" target="_blank" class="block">
+      <img
+        src="/logo/РЖД.png"
+        alt="Описание изображения 1"
+        class="w-full h-auto rounded-lg shadow-md hover:shadow-lg transition-shadow"
+      />
+    </a>
+    <p class="text-xl">Железная дорога</p>
+  </div>
+  
+  <div class="flex flex-col">
+    <a href="https://glsystem.net/" target="_blank" class="block">
+      <img
+        src="/logo/Garpix_Load_System.png"
+        alt="Описание изображения 2"
+        class="w-full h-auto rounded-lg shadow-md hover:shadow-lg transition-shadow"
+      />
+    </a>
+    <p class="text-xl">Планировщик загрузки</p>
+  </div>
+  
+  <div class="flex flex-col">
+    <a href="https://lp.market.master-tms.ru/" target="_blank" class="block">
+      <img
+        src="/logo/MasterTMS.png"
+        alt="Описание изображения 3"
+        class="w-full h-auto rounded-lg shadow-md hover:shadow-lg transition-shadow"
+      />
+    </a>
+    <p class="text-xl">Биржа транспорта MasterTMS</p>
+  </div>
+  
+  <div class="flex flex-col">
+    <a href="https://www.vezetvsem.ru/" target="_blank" class="block">
+      <img
+        src="/logo/везет всем.png"
+        alt="Описание изображения 4"
+        class="w-full h-auto rounded-lg shadow-md hover:shadow-lg transition-shadow"
+      />
+    </a>
+    <p class="text-xl">Биржа перевозчиков</p>
+  </div>
+  
+  <div class="flex flex-col">
+    <a href="https://ati.su/" target="_blank" class="block">
+      <img
+        src="/logo/атису(2).jpg"
+        alt="Описание изображения 5"
+        class="w-full h-auto rounded-lg shadow-md hover:shadow-lg transition-shadow"
+      />
+    </a>
+    <p class="text-xl">Биржа перевозчиков ATI.SU</p>
+  </div>
+  
+  <div class="flex flex-col">
+    <a href="https://dostavka.yandex.ru/magistral/" target="_blank" class="block">
+      <img
+        src="/logo/яндекс (магистрали).png"
+        alt="Описание изображения 6"
+        class="w-full h-auto rounded-lg shadow-md hover:shadow-lg transition-shadow"
+      />
+    </a>
+    <p class="text-xl">Биржа перевозчиков яндекса</p>
+  </div>
+  
+  <div class="flex flex-col">
+    <a href="https://rynda.io/ahoy" target="_blank" class="block">
+      <img
+        src="/logo/рында.png"
+        alt="Описание изображения 7"
+        class="w-full h-auto rounded-lg shadow-md hover:shadow-lg transition-shadow"
+      />
+    </a>
+    <p class="text-xl">Рында</p>
+  </div>
+  
+  <div class="flex flex-col">
+    <a href="https://www.cdek.ru" target="_blank" class="block">
+      <img
+        src="/logo/large_logo-cdek.png"
+        alt="Описание изображения 8"
+        class="w-full h-auto rounded-lg shadow-md hover:shadow-lg transition-shadow"
+      />
+    </a>
+    <p class="text-xl">СДЕК</p>
+  </div>
+  
+  <div class="flex flex-col">
+    <a href="https://www.pochta.ru/" target="_blank" class="block">
+      <img
+        src="/logo/почта.jpg"
+        alt="Описание изображения 9"
+        class="w-full h-auto rounded-lg shadow-md hover:shadow-lg transition-shadow"
+      />
+    </a>
+    <p class="text-xl">Почта России</p>
+  </div>
+  
+  <div class="flex flex-col">
+    <a href="https://rdlog.ru/" target="_blank" class="block">
+      <img
+        src="/logo/таможня.png"
+        alt="Описание изображения 10"
+        class="w-full h-auto rounded-lg shadow-md hover:shadow-lg transition-shadow"
+      />
+    </a>
+    <p class="text-xl">Таможня</p>
+  </div>
+  
+  <div class="flex flex-col">
+    <a href="https://pb.nalog.ru/" target="_blank" class="block">
+      <img
+        src="/logo/ФНС.png"
+        alt="Описание изображения 11"
+        class="w-full h-auto rounded-lg shadow-md hover:shadow-lg transition-shadow"
+      />
+    </a>
+    <p class="text-xl">Проверь контрагента</p>
+  </div>
+  
+  <div class="flex flex-col">
+    <a href="https://www.alta.ru/" target="_blank" class="block">
+      <img
+        src="/logo/альта-софт.png"
+        alt="Описание изображения 12"
+        class="w-full h-auto rounded-lg shadow-md hover:shadow-lg transition-shadow"
+      />
+    </a>
+    <p class="text-xl">ТН ВЭД</p>
+  </div>
+  
+  <div class="flex flex-col">
+    <a href="https://складоискатель.ru/" target="_blank" class="block">
+      <img
+        src="/logo/складоискатель.jpeg"
+        alt="Описание изображения 13"
+        class="w-full h-auto rounded-lg shadow-md hover:shadow-lg transition-shadow"
+      />
+    </a>
+    <p class="text-xl">Склады</p>
+  </div>
+  
+  <div class="flex flex-col">
+    <a href="https://www.fesco.ru" target="_blank" class="block">
+      <img
+        src="/logo/феско.jpg"
+        alt="Описание изображения 14"
+        class="w-full h-auto rounded-lg shadow-md hover:shadow-lg transition-shadow"
+      />
+    </a>
+    <p class="text-xl">Феско</p>
+  </div>
+  
+  <div class="flex flex-col">
+    <a href="https://cargo.rzd.ru/ru/9802?ysclid=m7tdoq8p3h218674586" target="_blank" class="block">
+      <img
+        src="/logo/РЖД.png"
+        alt="Описание изображения 15"
+        class="w-full h-auto rounded-lg shadow-md hover:shadow-lg transition-shadow"
+      />
+    </a>
+    <p class="text-xl">ЕТСНГ</p>
+  </div>
+  
+  <div class="flex flex-col">
+    <a href="https://www.openrailwaymap.org/index.php" target="_blank" class="block">
+      <img
+        src="/logo/РЖД.png"
+        alt="Описание изображения 16"
+        class="w-full h-auto rounded-lg shadow-md hover:shadow-lg transition-shadow"
+      />
+    </a>
+    <p class="text-xl">Карта ЖД путей</p>
+  </div>
+  
+</div>
+          </div>
+        
+          <input
+            type="radio"
+            name="tabs"
+            id="tab5"
+            class="hidden peer/tab5"
+            
+          />
+          <div class="tab-content peer-checked/tab5:block hidden">
+            <!-- <h1 class="text-2xl font-bold">Расчеты 1</h1> -->
+            <script>
+  var MARKER_ICON_PAIRS = new Map();
+  var PREPARED_FOR_TRAIL_ORDERS = new Map();
+
+  function unprepare_markers() {
+    for (const order_id of PREPARED_FOR_TRAIL_ORDERS.keys()) {
+      marker_obj = MARKER_ICON_PAIRS.get(order_id);
+      marker_obj.unprepare();
+      marker_obj.inGroup = true;
+      marker_obj.remove();
+    }
+    PREPARED_FOR_TRAIL_ORDERS.clear();
+  }
+  function update_fileters() {
+    let inputIsUniversal = document.getElementById(
+      "input-filter-universal",
+    ).checked;
+    let inputIsCooled = document.getElementById("input-filter-cooled").checked;
+
+    for (let marker_obj of MARKER_ICON_PAIRS.values()) {
+      let should_be_visible = false;
+      if (inputIsUniversal && !marker_obj.isCold) {
+        should_be_visible = true;
+      }
+      if (inputIsCooled && marker_obj.isCold) {
+        should_be_visible = true;
+      }
+      if (marker_obj.inGroup) {
+        should_be_visible = false;
+      }
+      if (should_be_visible) {
+        marker_obj.place();
+      } else {
+        marker_obj.remove();
+      }
+    }
+  }
+
+  var GROUPS = [];
+  var ALL_UPDATES = [update_fileters];
+  function update_all() {
+    for (const update of ALL_UPDATES) {
+      update();
+    }
+  }
+  function add_prepared_to_group() {
+    const inputs = getInputs();
+    if (inputs === null) {
+      alert("Нужно заполнить форму");
+      return;
+    }
+    <!-- alert(inputs); -->
+    const [desctinationPoint, operationType, groupPrice] = inputs;
+    let sum_weight = 0;
+    let sum_volume = 0;
+    for (const [i, order] of PREPARED_FOR_TRAIL_ORDERS.entries()) {
+      sum_weight += order.weight_sum;
+      sum_volume += order.volume_sum;
+    }
+    // alert(document.getElementById("select-destination-point").value)
+    GROUPS.push({
+      orders: Array.from(PREPARED_FOR_TRAIL_ORDERS.values()),
+      order_ids: Array.from(PREPARED_FOR_TRAIL_ORDERS.keys()),
+      group_adress_to: desctinationPoint,
+      group_type: operationType,
+      group_volume: +sum_volume.toFixed(2),
+      group_weight: +sum_weight.toFixed(2),
+      group_price: groupPrice,
+    });
+    unprepare_markers();
+    update_all();
+    my_modal_1.close();
+  }
+  function remove_group(group_id) {
+    let group = GROUPS[group_id];
+    for (let order_id of group.order_ids) {
+      market_obj = MARKER_ICON_PAIRS.get(order_id);
+      market_obj.unprepare();
+      market_obj.inGroup = false;
+    }
+    GROUPS.splice(group_id, 1);
+    update_all();
+  }
+  function spaced_cost(group, order) {
+    return (
+      group.group_price *
+      ((0.4 * order.weight_sum) / group.group_weight +
+        (0.6 * order.volume_sum) / group.group_volume)
+    ).toFixed(2);
+  }
+</script>
+<div class="flex h-[80vh]">
+  <button class="btn flex-initial w-32" onclick="my_modal_1.showModal()">
+    Cформировать участок маршрута
+    <script>
+      {
+        let me_ = me();
+        ALL_UPDATES.push(() => {
+          if (PREPARED_FOR_TRAIL_ORDERS.size === 0) {
+            me_.classList.add("btn-disabled");
+          } else {
+            me_.classList.remove("btn-disabled");
+          }
+        });
+      }
+    </script>
+  </button>
+  <div class="w-10"></div>
+  <div class="flex-grow flex">
+    <div class="flex gap-2 flex-col">
+      <input
+        type="checkbox"
+        checked="checked"
+        class="checkbox"
+        id="input-filter-universal"
+        onclick="update_fileters()"
+      />
+      <div class="flex">
+        <img
+          class="h-8 object-scale-down"
+          src="/icons/common.png"
+        />
+        универсальный
+      </div>
+      <input
+        type="checkbox"
+        checked="checked"
+        class="checkbox"
+        id="input-filter-cooled"
+        onclick="update_fileters()"
+      />
+      <div class="flex">
+        <img
+          class="h-8 object-scale-down"
+          src="/icons/cold.png"
+        />
+        охлажденный
+      </div>
+      <button class="btn flex-initial w-16">
+        Сбросить фильтры
+        <script>
+          {
+            me().on("click", (ev) => {
+              document.getElementById("input-filter-universal").checked = true;
+              document.getElementById("input-filter-cooled").checked = true;
+              update_fileters();
+            });
+          }
+        </script>
+      </button>
+      <div>
+        
+          <script type="text-handlebars-template">
+            <div class="h-8"></div>
+            <p>Объём: {{sum_volume}}</p> м³</br>
+            <p>Вес: {{sum_weight}} кг</p>
+          </script>
+        
+        <script>
+          {
+            let target = me();
+            let template = Handlebars.compile(me("-").innerHTML);
+            ALL_UPDATES.push(() => {
+              let sum_weight = 0;
+              let sum_volume = 0;
+              for (const [i, order] of PREPARED_FOR_TRAIL_ORDERS.entries()) {
+                sum_weight += order.weight_sum;
+                sum_volume += order.volume_sum;
+              }
+              target.innerHTML = template({
+                sum_weight: +sum_weight.toFixed(2),
+                sum_volume: +sum_volume.toFixed(2),
+              });
+            });
+          }
+        </script>
+      </div>
+    </div>
+    <div id="map" class="flex-grow"></div>
+    <script src="/map.js" type="module"></script>
+  </div>
+</div>
+<div>
+  
+    <script type="text-handlebars-template">
+      <table class="min-w-full table-auto border">
+          <tr>
+            <th class="border">ЭТАП 1</th>
+            <th class="border">№ Грузовой партии</th>
+            <th class="border">условия трансп.</th>
+            <th class="border">Адрес отправления</th>
+            <th class="border">Продавец</th>
+            <th class="border">Покупатель</th>
+            <th class="border">Тип груза</th>
+            <th class="border">Объем</th>
+            <th class="border">Вес</th>
+            <th class="border">Адрес точки прибытия</th>
+            <th class="border">Описание операции</th>
+
+            <th class="border">Общий объем грузов в маршруте</th>
+            <th class="border">Общий вес грузов в маршруте</th>
+            <th class="border">Общая стоимость операции</th>
+            <th class="border">Разнесенная стоимость операции</th>
+          </tr>
+          {{#each groups}}
+            {{#each orders}}
+            <tr>
+              {{#if @first}}
+                <td class="border" rowspan="{{ ../orders.length }}">
+                  <button class="btn btn-soft btn-secondary" onclick="remove_group({{@../index}})">Удалить
+                  </button>
+                </td>
+                <td class="border" rowspan="{{ ../orders.length }}">{{@../index}}</td>
+              {{/if}}
+              <td class="border">{{#if cold_conditions }}охлажденный{{else}}универсальный{{/if}}</td>
+              <td class="border">{{ addres_from }}</td>
+              <td class="border">{{ seller }}</td>
+              <td class="border">{{ buyer }}</td>
+              <td class="border">{{ product_type }}</td>
+              <td class="border">{{ volume }}</td>
+              <td class="border">{{ weight }}</td>
+              {{#if @first}}
+                <td class="border" rowspan="{{ ../orders.length }}">{{ ../group_adress_to }}</td>
+                <td class="border" rowspan="{{ ../orders.length }}">{{ ../group_type }}</td>
+                <td class="border" rowspan="{{ ../orders.length }}">{{ ../group_volume }}</td>
+                <td class="border" rowspan="{{ ../orders.length }}">{{ ../group_weight }}</td>
+                <td class="border" rowspan="{{ ../orders.length }}">{{ ../group_price }}</td>
+              {{/if}}
+              <td class="border">{{ spaced_cost ../this this }}</td>
+            </tr>
+            {{/each}}
+          {{/each}}
+      </table>
+    </script>
+  
+  <script>
+    {
+      let target = me();
+      Handlebars.registerHelper("spaced_cost", spaced_cost);
+      let template = Handlebars.compile(me("-").innerHTML);
+      function update_btm_groups() {
+        target.innerHTML = template({ groups: GROUPS });
+      }
+    }
+    ALL_UPDATES.push(update_btm_groups);
+  </script>
+</div>
+
+<button class="btn my-8">Далее</button>
+
+<!-- MODAL DIALOG -->
+<dialog id="my_modal_1" class="modal">
+  <div class="modal-box w-11/12 max-w-5xl">
+    <div class="flex flex-col gap-6">
+      <h3 class="text-lg font-bold">Сформировать маршрут</h3>
+      <div>
+        
+          <script type="text-handlebars-template">
+            <table class="min-w-full table-auto border">
+              <tr>
+                <th class="border">Адрес отправления</th>
+                <th class="border">Oбъем м³</th>
+                <th class="border">Вес кг</th>
+                <th class="border">Товар</th>
+                <th class="border">Условия трансп.</th>
+              </tr>
+              {{#each orders}}
+              <tr>
+                <td class="border">{{ addres_from }}</td>
+                <td class="border">{{ volume_sum }}</td>
+                <td class="border">{{ weight_sum }}</td>
+                <td class="border">{{ product_type }}</td>
+                <td class="border">{{#if cold_conditions }}охлажденный{{else}}универсальный{{/if}}</td>
+              </tr>
+              {{/each}}
+            </table>
+          </script>
+        
+        <script>
+          {
+            let target = me();
+            let template = Handlebars.compile(me("-").innerHTML);
+            function update_modal_dialog_table() {
+              target.innerHTML = template({
+                orders: Array.from(PREPARED_FOR_TRAIL_ORDERS.values()),
+              });
+            }
+          }
+          ALL_UPDATES.push(update_modal_dialog_table);
+        </script>
+      </div>
+      <select id="select-destination-point" class="select">
+        <option value="0" disabled selected>Адрес точки назначения</option>
+        <option value="1">Порт</option>
+        <option value="2">Жд станция</option>
+        <option value="3">Склад</option>
+      </select>
+      <select id="select-operation-type" class="select">
+        <option value="0" disabled selected>Типа операции</option>
+        <option value="1">Доехать до КЛД по ЖД</option>
+        <option value="2">Доплыть до КЛД по морю</option>
+        <option value="3">Без операций</option>
+        <option value="4">Доехать до порта</option>
+        <option value="5">Дозагрузиться в контейнер в порту</option>
+        <option value="6">Доехать до жд станции</option>
+        <option value="7">Доехать до склада</option>
+        <option value="8">Доехать до портового склада</option>
+      </select>
+      <input
+        id="input-group-price"
+        type="number"
+        placeholder="Суммарная цена"
+        class="input"
+      />
+      <button class="btn" onclick="add_prepared_to_group()">
+        Сформировать маршрут
+      </button>
+      <script src="/get_modal_inputs.js" type="module"></script>
+    </div>
+    <div class="modal-action w-[80vh]">
+      <form method="dialog">
+        <!-- if there is a button in form, it will close the modal -->
+        <div class="flex">
+          <button
+            class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+          >
+            x
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</dialog>
+<script>
+  update_all();
+</script>
+          </div>
+        
+          <input
+            type="radio"
+            name="tabs"
+            id="tab6"
+            class="hidden peer/tab6"
+            
+          />
+          <div class="tab-content peer-checked/tab6:block hidden">
+            <!-- <h1 class="text-2xl font-bold">Расчеты 2</h1> -->
+            
+          </div>
+        
+          <input
+            type="radio"
+            name="tabs"
+            id="tab7"
+            class="hidden peer/tab7"
+            
+          />
+          <div class="tab-content peer-checked/tab7:block hidden">
+            <!-- <h1 class="text-2xl font-bold">Расчеты 3</h1> -->
+            
+          </div>
+        
+          <input
+            type="radio"
+            name="tabs"
+            id="tab8"
+            class="hidden peer/tab8"
+            
+          />
+          <div class="tab-content peer-checked/tab8:block hidden">
+            <!-- <h1 class="text-2xl font-bold">Выставление счетов</h1> -->
+            <h class="text text-xl pb-2"> Выставление счетов </h>
+<div>
+  
+    <script id="done-template" type="text-handlebars-template">
+      <table class="min-w-full table-auto border">
+          <tr>
+            <th class="border">№</th>
+            <th class="border">Клиент</th>
+            <th class="border">доп. Расходы</th>
+            <th class="border">Сумма по счету</th>
+            <th class="border">Статус</th>
+          </tr>
+          {{#each buyers}}
+          <tr>
+            <td class="border">{{ @index }}</td>
+            <td class="border">{{ name }}</td>
+            <td class="border"> </td>
+            <td class="border">{{ price }}</td>
+            <td class="border"> в обработке </td>
+          </tr>
+          {{/each}}
+      </table>
+    </script>
+  
+  <script>
+    {
+      let target = me();
+      let template = Handlebars.compile(me("-").innerHTML);
+      
+      ALL_UPDATES.push(() => {
+        let price_by_name = new Map();
+        for (group of GROUPS) {
+          for (order of group.orders) {
+            price_by_name.set(order.buyer, 0);
+          }
+        }
+
+        for (group of GROUPS) {
+          for (order of group.orders) {
+            let currentPrice = price_by_name.get(order.buyer) || 0;
+            price_by_name.set(
+              order.buyer,
+              Number(currentPrice) + Number(spaced_cost(group, order)),
+            );
+          }
+        }
+
+        buyers = [];
+        for (const [name, price] of price_by_name.entries()) {
+          buyers.push({ name: name, price: +Number(price).toFixed(2) });
+        }
+        target.innerHTML = template({
+          buyers: buyers,
+        });
+      });
+    }
+  </script>
+</div>
+
+<!-- <div id="done-out"></div> -->
+<!-- <script src="/public/map/done_orders.js" type="module"></script> -->
+<!-- <script type="module"> -->
+<!-- import { ORDERS } from "/public/map/current_orders.js"; -->
+<!-- Handlebars.registerHelper("x5", function (aNumber) { -->
+<!-- return aNumber * 5; -->
+<!-- }); -->
+<!-- var source = document.getElementById("done-template").innerHTML; -->
+<!-- var template = Handlebars.compile(source); -->
+<!-- var context = { orders: ORDERS }; -->
+<!-- document.getElementById("done-out").innerHTML = template(context); -->
+<!-- </script> -->
+          </div>
+        
+          <input
+            type="radio"
+            name="tabs"
+            id="tab9"
+            class="hidden peer/tab9"
+            
+          />
+          <div class="tab-content peer-checked/tab9:block hidden">
+            <!-- <h1 class="text-2xl font-bold">Крупный заказ</h1> -->
+            
+<script id="mono-template" type="text-handlebars-template">
+  <table class="min-w-full table-auto border">
+    <!-- <thead> -->
+      <tr>
+        <th class="border">Покупатель</th>
+        <th class="border">Условия транспортировки</th>
+        <th class="border">Продавец</th>
+        <th class="border">Регион отправления</th>
+        <th class="border">Адрес отправления</th>
+        <th class="border">Адрес доставки</th>
+        <th class="border">Тип груза</th>
+        <th class="border">Наименование товара</th>
+        <th class="border">Общее количество штук</th>
+        <th class="border">Вес единицы, кг</th>
+        <th class="border">Длина, м</th>
+        <th class="border">Ширина, м</th>
+        <th class="border">Высота, м</th>
+        <th class="border">Объем единицы, м^3</th>
+        <th class="border">Общий Вес, кг</th>
+        <th class="border">Общий объем, м^3</th>
+        <th class="border">ТН ВЭД</th>
+        <th class="border">ЕТ СНГ</th>
+        <th class="border">Статус</th>
+        <th class="border">"Цена доставки"</th>
+        <th class="border">Маршрут</th>
+      </tr>
+      {{#each orders}}
+      <tr>
+        <td class="border">{{ buyer }}</td>
+        <td class="border">{{#if cold_conditions }}охлажденный{{else}}универсальный{{/if}}</td>
+        <td class="border">{{ seller }}</td>
+        <td class="border">{{ regio_from }}</td>
+        <td class="border">{{ addres_from }}</td>
+        <td class="border">{{ addres_to }}</td>
+        <td class="border">{{ product_type }}</td>
+        <td class="border">{{ product_name }}</td>
+        <td class="border">{{ count }}</td>
+        <td class="border">{{ weight }}</td>
+        <td class="border">{{ length }}</td>
+        <td class="border">{{ width }}</td>
+        <td class="border">{{ height }}</td>
+        <td class="border">{{ volume }}</td>
+        <td class="border">{{ weight_sum }}</td>
+        <td class="border">{{ volume_sum }}</td>
+        <td class="border">{{ code1 }}</td>
+        <td class="border">{{ code2 }}</td>
+        <td class="border">{{ status }}</td>
+        <td class="border">{{ price }}</td>
+        <td class="border"> <button class="btn">Маршрут</button></td>
+      </tr>
+      {{/each}}
+    <!-- </thead> -->
+  </table>
+</script>
+
+<div id="mono-out"></div>
+<!-- <script src="/public/map/mono_orders.js" type="module"></script> -->
+<script type="module">
+  import { ORDERS } from "/mono_orders.js"
+  var source = document.getElementById("mono-template").innerHTML;
+  var template = Handlebars.compile(source);
+  var context = { orders: ORDERS };
+  document.getElementById("mono-out").innerHTML = template(context);
+</script>
+          </div>
+        
+          <input
+            type="radio"
+            name="tabs"
+            id="tab10"
+            class="hidden peer/tab10"
+            checked
+          />
+          <div class="tab-content peer-checked/tab10:block hidden">
+            <!-- <h1 class="text-2xl font-bold">Поддержка</h1> -->
+            <p> support </p>
+          </div>
+        
+      </div>
+    </div>
+  </body>
+</html>
