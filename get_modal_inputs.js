@@ -1,4 +1,4 @@
-import { DESTINATION_POINT_MAP, OPERATION_TYPE_MAP } from "/const.js";
+import { DESTINATION_POINT_MAP, OPERATION_TYPE_MAP } from "/logistic/const.js";
 
 export function getInputs() {
   let selectDesctinationPoint = document.getElementById(

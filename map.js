@@ -1,20 +1,20 @@
-import { PLACES } from "./const.js";
-import { ORDERS } from "/current_orders.js";
+import { PLACES } from "/logistic/const.js";
+import { ORDERS } from "/logistic/current_orders.js";
 
 let clickedIcon = L.icon({
-  iconUrl: "/icons/taped.png",
+  iconUrl: "/logistic/icons/taped.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
 });
 let cooledIcon = L.icon({
-  iconUrl: "/icons/cold.png",
+  iconUrl: "/logistic/icons/cold.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
 });
 let defaultIcon = L.icon({
-  iconUrl: "/icons/common.png",
+  iconUrl: "/logistic/icons/common.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
