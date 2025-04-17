@@ -394,7 +394,7 @@
 <div id="current-out"></div>
 <!-- <script src="/public/map/current_orders.js" type="module"></script> -->
 <script type="module">
-  import { ORDERS } from "/alekseybessonovkgd.github.io/current_orders.js"
+  import { ORDERS } from "/logistic/current_orders.js"
   var source = document.getElementById("current-template").innerHTML;
   var template = Handlebars.compile(source);
   var context = { orders: ORDERS };
@@ -466,7 +466,7 @@
 <div id="done-out"></div>
 <!-- <script src="/public/map/done_orders.js" type="module"></script> -->
 <script type="module">
-  import { ORDERS } from "/alekseybessonovkgd.github.io/logistic/current_orders.js";
+  import { ORDERS } from "/logistic/current_orders.js";
   Handlebars.registerHelper("x5", function (aNumber) {
     return aNumber * 5;
   });
@@ -1373,7 +1373,7 @@
 <div id="mono-out"></div>
 <!-- <script src="/public/map/mono_orders.js" type="module"></script> -->
 <script type="module">
-  import { ORDERS } from "/alekseybessonovkgd.github.io/logistic/mono_orders.js"
+  import { ORDERS } from "/logistic/mono_orders.js"
   var source = document.getElementById("mono-template").innerHTML;
   var template = Handlebars.compile(source);
   var context = { orders: ORDERS };
