@@ -252,7 +252,7 @@
             class="p-2 mb-2 bg-base-200 hover:bg-base-300 rounded cursor-pointer"
             for="tab9"
             id="tab9_label"
-            >Крупный заказ
+            >Избранное
             <script>
               
               me().on("click", (ev) => {
@@ -1370,15 +1370,14 @@
   </table>
 </script>
 
-<div id="mono-out"></div>
-<!-- <script src="/public/map/mono_orders.js" type="module"></script> -->
+<!-- <div id="mono-out"></div>
 <script type="module">
   import { ORDERS } from "/logistic/mono_orders.js"
   var source = document.getElementById("mono-template").innerHTML;
   var template = Handlebars.compile(source);
   var context = { orders: ORDERS };
   document.getElementById("mono-out").innerHTML = template(context);
-</script>
+</script> -->
           </div>
         
           <input
