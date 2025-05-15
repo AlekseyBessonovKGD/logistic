@@ -135,6 +135,20 @@
               });
             </script>
           </label>
+
+          <label
+          class="p-2 mb-2 bg-base-200 hover:bg-base-300 rounded cursor-pointer"
+          for="tab11"
+          id="tab11_label"
+          >Точки сбора груза
+          <script>
+            
+            me().on("click", (ev) => {
+              //history.pushState({}, null, "/logist/profile");
+              check_me(me(ev));
+            });
+          </script>
+        </label>
         
           <label
             class="p-2 mb-2 bg-base-200 hover:bg-base-300 rounded cursor-pointer"
