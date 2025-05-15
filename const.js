@@ -1,15 +1,15 @@
 export const train_icon = L.icon({
-  iconUrl: "/logistic/icons/point_1.png",
+  iconUrl: "/logistic/icons/3.jpg",
   iconSize: [30, 21],
 });
 
 export const port_icon = L.icon({
-  iconUrl: "/logistic/icons/point_1.png",
+  iconUrl: "/logistic/icons/2.jpg",
   iconSize: [30, 30],
 });
 
 export const warehouse_icon = L.icon({
-  iconUrl: "/logistic/icons/point_1.png",
+  iconUrl: "/logistic/icons/1.jpg",
   iconSize: [30, 30],
 });
 export const flag_icon = L.icon({
