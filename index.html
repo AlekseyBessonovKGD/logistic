@@ -367,6 +367,7 @@
       <tr>
         <th class="border">Покупатель</th>
         <th class="border">Условия транспортировки</th>
+        <th class="border">Тип опасности</th>
         <th class="border">Продавец</th>
         <th class="border">Регион отправления</th>
         <th class="border">Адрес отправления</th>
@@ -386,11 +387,13 @@
         <th class="border">Статус</th>
         <th class="border">"Цена доставки"</th>
         <th class="border">Маршрут</th>
+        <th class="border">ответственный за перевозку</th>
       </tr>
       {{#each orders}}
       <tr>
         <td class="border">{{ buyer }}</td>
         <td class="border">{{#if cold_conditions }}охлажденный{{else}}универсальный{{/if}}</td>
+        <td class="border">{{ ifdanger }}</td>
         <td class="border">{{ seller }}</td>
         <td class="border">{{ regio_from }}</td>
         <td class="border">{{ addres_from }}</td>
@@ -410,6 +413,7 @@
         <td class="border">{{ status }}</td>
         <td class="border">{{ price }}</td>
         <td class="border"> <button class="btn">Маршрут</button></td>
+         <td class="border">{{ firm_name }}</td>
       </tr>
       {{/each}}
   </table>
