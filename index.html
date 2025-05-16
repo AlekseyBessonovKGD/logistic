@@ -1087,11 +1087,11 @@
             <th class="border">Вес</th>
             <th class="border">Адрес точки прибытия</th>
             <th class="border">Описание операции</th>
-
             <th class="border">Общий объем грузов в маршруте</th>
             <th class="border">Общий вес грузов в маршруте</th>
             <th class="border">Общая стоимость операции</th>
             <th class="border">Разнесенная стоимость операции</th>
+            <th class="border">расстояние до места назначения, км</th>
           </tr>
           {{#each groups}}
             {{#each orders}}
@@ -1118,6 +1118,7 @@
                 <td class="border" rowspan="{{ ../orders.length }}">{{ ../group_price }}</td>
               {{/if}}
               <td class="border">{{ spaced_cost ../this this }}</td>
+              <td class="border"> <input type="text"> </td>
             </tr>
             {{/each}}
           {{/each}}
